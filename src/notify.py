@@ -61,6 +61,8 @@ class TrayIndicator:
     self.statusIcon.connect('popup-menu', self.popup_menu_cb, self.menu)
     self.statusIcon.set_visible(1)
 
+    self.lastStatus = 'unknown'
+
     pynotify.init('HTC Hero in Play notifier')
     gobject.timeout_add(30000, checkAvailability, self)
 
@@ -70,7 +72,11 @@ class TrayIndicator:
     gtk.main_quit()
 
   def setAvailable(self, available):
-    print 'setting status icon'
+    if self.lastStatus == available: 
+      return
+    else:
+      self.lastStatus = available
+
     icon = gtk.STOCK_NO
     if available: icon = gtk.STOCK_YES
     tooltip = "HTC Hero is not available"
